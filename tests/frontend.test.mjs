@@ -1,0 +1,11 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import {parseCSV,inspectPDB,assertMapping,mapPDB,scoreColor} from '../site/core.mjs';
+const csv=fs.readFileSync(new URL('../site/examples/example.csv',import.meta.url),'utf8');
+const pdb=fs.readFileSync(new URL('../site/examples/example.pdb',import.meta.url),'utf8');
+test('Example has 53 finite probability pairs with strict sequence mapping',()=>{const rows=parseCSV(csv),p=inspectPDB(pdb,'A');assert.equal(rows.length,53);assertMapping(rows,p);});
+test('Reject duplicate or non-contiguous model residue positions',()=>assert.throws(()=>parseCSV(csv.replace('2,L,','1,L,'))));
+test('Reject NaN probabilities',()=>assert.throws(()=>parseCSV(csv.replace('0.133550614','NaN'))));
+test('Reject mismatched structure and score sequences',()=>assert.throws(()=>assertMapping(parseCSV(csv),{sequence:'AAAA'})));
+test('Wrong chain is not silently substituted',()=>assert.throws(()=>inspectPDB(pdb,'Z')));
+test('Mapped B fields represent probability not percent',()=>{const r=parseCSV(csv),p=inspectPDB(pdb,'A');const out=mapPDB(pdb,p,r).split('\n').find(x=>x.startsWith('ATOM  '));assert.equal(Number(out.slice(60,66)),.13);});
+test('Difference color zero is neutral',()=>assert.equal(scoreColor(0,true),'#eef1ed'));

@@ -1,0 +1,15 @@
+{
+  "schema": "rimbind_web_service_v0.1",
+  "model_variant": "C",
+  "fold_aggregation": "mean_of_five_sigmoid_probabilities",
+  "dna": {"probability_key": "BAYES_RIM", "mode": "FULL", "alpha": 0.2, "tau": 1.0},
+  "rna": {"probability_key": "NO_TEMPLATE_COUNT", "mode": "NO_TEMPLATE_COUNT", "alpha": 0.8, "tau": 4.0},
+  "prior": 0.1,
+  "tm_exponent": 2.0,
+  "threshold": 0.5,
+  "max_input_bytes": 2097152,
+  "initial_service_max_residues": 600,
+  "live_prediction_enabled": false,
+  "accepted_input": "protein chain in PDB; optional matching sequence",
+  "release_gate": "Full raw-PDB-to-probabilities GPU validation has not passed."
+}

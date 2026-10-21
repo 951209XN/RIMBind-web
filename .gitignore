@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+*.pt
+*.pth
+*.safetensors
+private_assets/
+jobs/
+downloads/
+*.tar.gz
+.DS_Store
+audit_private/

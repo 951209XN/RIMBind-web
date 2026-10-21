@@ -1,0 +1,8 @@
+{
+  "repository_url": "https://github.com/951209XN/RIMBind-web",
+  "space_url": "",
+  "live_prediction_enabled": false,
+  "service_status": "Pre-release · inference validation pending",
+  "model_version": "DNA FULL / RNA CR",
+  "threshold": 0.5
+}

@@ -1,0 +1,12 @@
+RIMBind Web, pre-release development workspace.
+Original frozen RIMBind model and pipeline source snapshots are copied from the
+study's audited public-release candidate, under Apache License 2.0.
+
+The model-C loader changes only import-time dependency handling in an execution
+AST. Frozen source bytes and checkpoint tensors are not changed. CPU numerical
+acceptance did not pass the preselected 1e-5 tolerance; no full-model web service
+has been declared validated.
+
+3Dmol.js is a separate BSD-3-Clause component by the University of Pittsburgh
+and contributors. Its upstream and bundled third-party notices are retained in
+site/vendor/. These notices do not relicense pretrained model weights or data.
