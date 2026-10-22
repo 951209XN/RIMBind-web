@@ -12,16 +12,19 @@ Public interface: https://951209xn.github.io/RIMBind-web/ . Pages deployment suc
 
 - Frozen DNA FULL / RNA CR formula routing and five-fold probability aggregation contracts.
 - Strict PDB chain/sequence intake; model positions are distinguished from original residue keys.
-- Eighteen Python contract tests (including eight Space-package checks) and seven browser-data/JavaScript contract tests.
+- Twenty-five Python contract tests and seven browser-data/JavaScript contract tests.
 - Gradio 6.30.0 / Python 3.12 preflight UI constructed and served locally; the 53-residue input check and wrong-chain/sequence rejection passed. This is not a hosted-Space or model test.
-- A user-supplied Space log reported `No @spaces.GPU function detected during startup`. The preflight now registers a real, opt-in CUDA allocation/arithmetic diagnostic via `@spaces.GPU(duration=20)` with explicit `spaces` and `torch` dependencies. It does not run RIMBind or relax any numerical gate; actual hosted startup and GPU execution still need confirmation.
+- User-supplied screenshots now show the preflight running on ZERO and its real CUDA hardware diagnostic passing. This remains hardware-only evidence, not hosted model acceptance.
 - All ten task-specific checkpoint and two training-memory-label checksums verified against the original release manifest, without publishing those files.
 - Prepared-feature model-C test on the 53-residue 6JHE A example. CPU PyTorch 2.8 differed from the original output by **1.3380931289663778e-05**, above the preselected **1e-05** tolerance. Numerical acceptance therefore **did not pass**; the threshold was not relaxed. This is not a raw-PDB or GPU test.
+- Subsequent original-server GPU tests passed the same DNA core comparison: PyTorch 2.1.1 maximum error **4.87e-10**, and PyTorch 2.10 maximum error **6.01e-08**. These do not erase the CPU failure or validate ZeroGPU.
+- A full inference candidate now implements raw PDB intake, frozen Foldseek/3Di and memory projection, local-only pinned SaProt/ESM3 encoders, strict five-fold C inference, DNA FULL / RNA CR fusion and mapped CSV/PDB/provenance exports. The separate `deploy/hf-full/` app remains gated, not automatically deployed.
+- RNA case 9T7T (264 residues) passed raw-PDB replay on the original server's RTX 3090 at the fixed 1e-5 tolerance (maximum probability error **4.14296e-06**). The DNA raw-PDB replay **did not pass**: the RTX 4080 SUPER test differed by **0.00292251**, and the RTX 3090 test by **1.03413e-05**. Existing query labels were not read and no weights, parameters or tolerance were changed. See [integration status](deploy/FULL_INTEGRATION_STATUS_20261022.md).
 
 ### Remaining release gates
 
-1. Confirmed free ZeroGPU hardware and repository write access for the owner's newly created [Space](https://huggingface.co/spaces/XuNing985/RIMBind-web). Its initial repository exists but contains no application yet. A read-only research connection or paid Jobs API is not a substitute.
-2. A private, authorized frozen asset bundle including the original predicted training-memory structures and exact foundation encoders/tokenizers. The local checkpoint archive alone is insufficient.
+1. Authorized upload of the full candidate and model assets to the owner's [Space](https://huggingface.co/spaces/XuNing985/RIMBind-web). Its hardware preflight works, but the full model has not been uploaded or tested. Current browser-origin restrictions must not be bypassed through another upload mechanism.
+2. A complete external asset bundle including the frozen memory databases and exact foundation encoders/tokenizers. The owner authorized non-commercial scientific deployment on 2026-10-22, but third-party licensing and provenance still apply separately.
 3. End-to-end raw-PDB processing and numerical acceptance on the target GPU environment, including separate DNA FULL and RNA CR examples.
 4. Upload privacy/retention, queue, failure, rate-limit and outside-network browser tests. Public browser navigation did not complete during this session; HTTP resource checks are not a replacement for browser interaction tests.
 
@@ -32,7 +35,7 @@ Do not describe the service as available for online inference in a manuscript be
 | Directory | Purpose |
 |---|---|
 | `site/` | Buildless GitHub Pages interface. No backend tokens or uploads. |
-| `backend/` | Input contracts, verified fusion math, frozen-C loader and deployment diagnostics. |
+| `backend/` | Input contracts, local assets, encoders, frozen retrieval/fusion, C loader, inference coordinator and mapped exports. |
 | `vendor/` | Original source snapshots; original Apache-2.0 notice applies. |
 | `configs/` | Task rules and checkpoint SHA256 manifest, not weights. |
 | `tests/` | Contract checks. |

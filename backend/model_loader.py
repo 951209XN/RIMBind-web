@@ -5,8 +5,11 @@ import types
 from pathlib import Path
 
 SOURCE=Path(__file__).resolve().parents[1]/'vendor/frozen_model_single.py'
+EXPECTED_SOURCE_SHA256='cb7e9b754ef15555d211168d809f078fb424d3dfbff7718833e010dfa5a2819c'
 
 def load_model_c():
+    if source_sha256()!=EXPECTED_SOURCE_SHA256:
+        raise RuntimeError('Frozen model source SHA256 mismatch')
     tree=ast.parse(SOURCE.read_text())
     # Source uses Mamba only when constructing E/F, never C. Remove that import
     # from the execution AST; source bytes and parameter names remain unchanged.
