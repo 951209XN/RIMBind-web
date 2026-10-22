@@ -1,6 +1,10 @@
 """Static deployment contracts; these do not test hosted inference."""
 import ast
+import hashlib
 from pathlib import Path
+import subprocess
+import sys
+import tempfile
 import unittest
 
 SPACE = Path(__file__).resolve().parents[1] / 'deploy/hf-space'
@@ -29,6 +33,25 @@ class SpacePackage(unittest.TestCase):
         self.assertEqual(len(calls), 1)
         self.assertEqual(len(guards), 1)
         self.assertIn(calls[0], list(ast.walk(guards[0])))
+
+    def test_flat_bundle_exact_files_and_unchanged_parser(self):
+        repo = SPACE.parents[1]
+        with tempfile.TemporaryDirectory(prefix='rimbind-flat-test-') as temporary:
+            target = Path(temporary) / 'package'
+            subprocess.run([sys.executable, str(repo / 'tools/prepare_space.py'), '--flat', '--output', str(target)], check=True, capture_output=True)
+            self.assertEqual({p.name for p in target.iterdir()}, {'app.py','inputs.py','README.md','requirements.txt','LICENSE'})
+            self.assertTrue(all(p.is_file() for p in target.iterdir()))
+            self.assertIn('from inputs import parse_pdb', (target / 'app.py').read_text())
+            digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+            self.assertEqual(digest(target / 'inputs.py'), digest(repo / 'backend/inputs.py'))
+
+    def test_original_bundle_still_has_backend_directory(self):
+        repo = SPACE.parents[1]
+        with tempfile.TemporaryDirectory(prefix='rimbind-nested-test-') as temporary:
+            target = Path(temporary) / 'package'
+            subprocess.run([sys.executable, str(repo / 'tools/prepare_space.py'), '--output', str(target)], check=True, capture_output=True)
+            self.assertTrue((target / 'backend/inputs.py').is_file())
+            self.assertIn('from backend.inputs import parse_pdb', (target / 'app.py').read_text())
 
 if __name__ == '__main__':
     unittest.main()

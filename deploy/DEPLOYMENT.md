@@ -22,6 +22,8 @@ The connected research integration has read-repository and Jobs scopes, not repo
 
 `deploy/hf-space/` is a small Gradio diagnostic app, **not full inference**. It verifies input parsing and documents live-release gates. Upload the complete repository with the Space README at its root and app entry `app.py`; `tools/prepare_space.py` builds the upload folder without weights. Choose free ZeroGPU only if the account UI explicitly confirms it is free and eligible. A paid hardware selection is outside this task.
 
+For a file-only web picker, run `python tools/prepare_space.py --flat --output /absolute/new/output`. This creates exactly five root files (`app.py`, `inputs.py`, `README.md`, `requirements.txt`, `LICENSE`) and changes only the parser import to `from inputs import parse_pdb`. The parser bytes and inference-disabled status remain unchanged. Upload those five files at the Space root; do not mix the flat `app.py` with the nested package or upload its parent audit folder. The ordinary nested package remains available for CLI/Git workflows.
+
 ### What must exist before live inference
 
 - Authorized private task checkpoint bundle, all ten original SHA256 matches.

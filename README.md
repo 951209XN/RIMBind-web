@@ -12,7 +12,7 @@ Public interface: https://951209xn.github.io/RIMBind-web/ . Pages deployment suc
 
 - Frozen DNA FULL / RNA CR formula routing and five-fold probability aggregation contracts.
 - Strict PDB chain/sequence intake; model positions are distinguished from original residue keys.
-- Fourteen Python contract tests (including four Space-package checks) and seven browser-data/JavaScript contract tests.
+- Sixteen Python contract tests (including six Space-package checks) and seven browser-data/JavaScript contract tests.
 - Gradio 6.30.0 / Python 3.12 preflight UI constructed and served locally; the 53-residue input check and wrong-chain/sequence rejection passed. This is not a hosted-Space or model test.
 - All ten task-specific checkpoint and two training-memory-label checksums verified against the original release manifest, without publishing those files.
 - Prepared-feature model-C test on the 53-residue 6JHE A example. CPU PyTorch 2.8 differed from the original output by **1.3380931289663778e-05**, above the preselected **1e-05** tolerance. Numerical acceptance therefore **did not pass**; the threshold was not relaxed. This is not a raw-PDB or GPU test.
