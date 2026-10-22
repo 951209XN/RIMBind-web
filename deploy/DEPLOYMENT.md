@@ -5,7 +5,7 @@
 1. Upload **only this repository directory**, never its parent `private_assets/`, `audit/`, manuscript folder, credentials or `.pt` files.
 2. Repository Settings → Pages → Source: GitHub Actions.
 3. Run “Scientific contracts”. Resolve actual failures.
-4. Run “Publish pre-release interface” manually. Use the URL returned by the deployment, not an assumed URL.
+4. “Publish pre-release interface” runs on changes to `site/` or its workflow on `main`, or can be run manually. Use the URL returned by the deployment, not an assumed URL.
 5. Confirm the page displays “inference validation pending”. The initial page is not a validated live WebServer.
 
 ## Hugging Face

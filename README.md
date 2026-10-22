@@ -16,7 +16,7 @@ A pre-release scientific web interface and external-compute deployment workspace
 
 ### Remaining release gates
 
-1. Authenticated write access to this GitHub repository and Pages activation.
+1. Successful GitHub Pages publication and public-page acceptance. Repository source push and the 17-test GitHub CI have already succeeded; the owner has enabled Pages with GitHub Actions.
 2. A Hugging Face Space under the owner's account, confirmed free ZeroGPU eligibility and write access. A read-only research connection or paid Jobs API is not a substitute.
 3. A private, authorized frozen asset bundle including the original predicted training-memory structures and exact foundation encoders/tokenizers. The local checkpoint archive alone is insufficient.
 4. End-to-end raw-PDB processing and numerical acceptance on the target GPU environment, including separate DNA FULL and RNA CR examples.
@@ -64,7 +64,7 @@ The unchanged frozen model file contains an unconditional import of Mamba althou
 
 ## Hosting
 
-See [`deploy/DEPLOYMENT.md`](deploy/DEPLOYMENT.md). GitHub's Pages workflow is manual (`workflow_dispatch`) to avoid inadvertently publishing an unreviewed interface. The root CI only tests contracts; it does not invoke a GPU or train a model. Keep all credentials in platform-managed authorization/secrets, never JavaScript, Git, logs or Issues.
+See [`deploy/DEPLOYMENT.md`](deploy/DEPLOYMENT.md). The Pages workflow supports manual dispatch and publishes changes to `site/` or its workflow on `main`, following the owner's Pages activation. Publication does not enable model inference. The root CI only tests contracts; it does not invoke a GPU or train a model. Keep all credentials in platform-managed authorization/secrets, never JavaScript, Git, logs or Issues.
 
 ## License and assets
 
