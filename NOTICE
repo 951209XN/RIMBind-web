@@ -10,3 +10,11 @@ has been declared validated.
 3Dmol.js is a separate BSD-3-Clause component by the University of Pittsburgh
 and contributors. Its upstream and bundled third-party notices are retained in
 site/vendor/. These notices do not relicense pretrained model weights or data.
+
+The optional owner-authorized installer retrieves private project assets and
+checksum-pinned upstream encoders. Foldseek is a separate GPL-3.0 program:
+https://github.com/steineggerlab/foldseek/tree/21952ed84e0f4a06ec6af08d58add77cef8dec14
+Its license accompanies the private runtime supplement; it is not relicensed
+under this repository's Apache-2.0 license. Encoder terms and frozen snapshot
+notices must be reviewed/retained independently; a current upstream license
+must not be assumed to resolve all historical-checkpoint licensing questions.

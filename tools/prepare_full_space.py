@@ -39,12 +39,11 @@ def main():
     a.output.mkdir(parents=True, exist_ok=False)
     archive = a.output/'runtime.zip'
     sources = list((ROOT/'backend').glob('*.py'))
-    sources += [ROOT/'vendor'/name for name in ('frozen_model_single.py', 'frozen_embeddings.py', 'frozen_memory_pipeline.py')]
-    sources += [ROOT/'configs/assets_manifest.json']
+    sources += list((ROOT/'vendor').glob('*.py'))
+    sources += list((ROOT/'configs').glob('*.json'))
     with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED) as z:
         for path in sorted(sources):
             z.write(path, str(path.relative_to(ROOT)))
-        z.writestr('vendor/__init__.py', '')
         z.write(ROOT/'deploy/hf-full/app.py', 'app_runtime.py')
     digest = hashlib.sha256(archive.read_bytes()).hexdigest()
     (a.output/'app.py').write_text(BOOTSTRAP.replace('__RUNTIME_SHA256__', digest))

@@ -1,0 +1,35 @@
+{
+  "schema": "rimbind_target_acceptance_protocol_v1",
+  "approved_date_local": "2026-10-22",
+  "owner_approved_same_hardware_comparator": true,
+  "owner_approval": "同意按同硬件原代码对照验收，并保留跨硬件差异",
+  "tolerance": 0.00001,
+  "historical_tolerance": 0.00001,
+  "required_tasks": ["dna", "rna"],
+  "reference_scope": "Unchanged frozen embedding and C0 CLI sources; only unused E/F Mamba import omitted from C execution AST and local ESM3 snapshot resolver pinned. Frozen memory projection/evidence reused. Not a claim of an untouched dependency environment.",
+  "historical_failures_remain_failures": true,
+  "performance_evaluation": false,
+  "public_release_authorized_by_this_file": false,
+  "reference_sources": {
+    "vendor/frozen_embeddings.py": "4b69a35c35d7300ad47c47967fc0d9e4c2010c63be804b4ff46ff34193ced9e1",
+    "vendor/frozen_c0_prediction.py": "fa3ef819b4dd3ca29220ed7c545534c0b31e106853ce002168a204da5d89779c",
+    "vendor/frozen_memory_pipeline.py": "4c54b4df83e58b3b7915d0cf5942908a99e9b13022026e4c9a22fadc7c13d57f",
+    "vendor/frozen_model_single.py": "cb7e9b754ef15555d211168d809f078fb424d3dfbff7718833e010dfa5a2819c"
+  },
+  "cases": {
+    "dna": {
+      "id": "9N3Y_6_F_DNA", "residues": 241,
+      "fixture_sha256": "48d63f1eb30533a5c8489fa80af559a287e5a1847d0add189e48dd708737e927",
+      "pdb_sha256": "d056f7f66623c1ea66c6a79d4094f077a065f61f8d289c3b2ad3103584762bd1",
+      "memory_json_sha256": "3054526f5f91ef09c409d79f142e29e1c1eaa086f07e4777c262e52c39f90f67",
+      "historical_csv_sha256": "6572eab82f726227834833ed2c5a2897386f4d7bb864cbc6d640fbd4224e1d3f"
+    },
+    "rna": {
+      "id": "9T7T_72_TB_RNA", "residues": 264,
+      "fixture_sha256": "82ac87d9a98c902a9cbe579cdecec3a7e91f5353b60d94498d5c77c6fc69e87e",
+      "pdb_sha256": "8faf280399f58e614cd3f8fc89ffbbebd5e405c4016410e4cb113a9da4ea48a2",
+      "memory_json_sha256": "6fca572e89ff2b3ed9818c359152d65ef45012444cf0ec9eeb45b08c29f810df",
+      "historical_csv_sha256": "10f0cf4fed0fb43aaa88dd4e970b73613fd884c172742653b505e9d1e5da1b2d"
+    }
+  }
+}

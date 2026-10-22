@@ -1,5 +1,11 @@
 # Full-model integration status — 2026-10-22
 
+Historical checkpoint of the earlier integration stage. Subsequent owner
+approval and controlled same-hardware checks are recorded in
+[the numerical follow-up](NUMERICAL_FOLLOWUP_20261022.md) and the
+[target protocol](../configs/target_acceptance_protocol.json). The failed
+historical comparisons in this document are retained, not retroactively passed.
+
 This is implementation/portability acceptance, not a new benchmark or manuscript
 performance analysis. Existing cases and existing probability references were
 used. No query labels, new AP calculations, checkpoint selection or retraining.

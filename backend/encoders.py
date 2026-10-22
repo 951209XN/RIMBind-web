@@ -16,12 +16,11 @@ def load_saprot(path, device='cpu'):
     return tokenizer, model
 
 
-def load_esm3(snapshot, device='cpu'):
+def pin_esm3_snapshot(snapshot):
     # esm 3.1.1's factory otherwise calls snapshot_download without a revision.
     # Constrain only that module's resolver to the administrator-verified local
     # snapshot. Architecture, tokenizer and all weight-loading code stay upstream.
     from esm.utils.constants import esm3 as constants
-    from esm.models.esm3 import ESM3
     snapshot = Path(snapshot).resolve()
 
     def pinned_snapshot(*args, **kwargs):
@@ -40,6 +39,11 @@ def load_esm3(snapshot, device='cpu'):
         raise RuntimeError('INFRA_PROVIDER conflicts with the pinned asset resolver')
     if Path(constants.data_root('esm3')).resolve() != snapshot:
         raise RuntimeError('ESM3 snapshot pinning failed')
+
+
+def load_esm3(snapshot, device='cpu'):
+    from esm.models.esm3 import ESM3
+    pin_esm3_snapshot(snapshot)
     return ESM3.from_pretrained('esm3_sm_open_v1', device=torch.device(device)).eval()
 
 

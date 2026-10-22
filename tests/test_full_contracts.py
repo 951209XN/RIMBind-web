@@ -52,7 +52,9 @@ class FullContracts(unittest.TestCase):
 
     def test_new_full_app_gate_is_closed_by_default(self):
         source = (ROOT/'deploy/hf-full/app.py').read_text()
-        self.assertIn("os.environ.get('RIMBIND_ENABLE_PREDICTION') == '1'", source)
+        self.assertIn("os.environ.get('RIMBIND_ENABLE_PREDICTION') != '1'", source)
+        self.assertIn('validate_certificate(CERTIFICATE, SERVICE.assets.lock_sha256)', source)
+        self.assertIn('current_runtime=runtime_fingerprint()', source)
         self.assertIn('interactive=ENABLED', source)
         self.assertIn('@spaces.GPU(duration=120)', source)
         self.assertIn('api_name=False', source)

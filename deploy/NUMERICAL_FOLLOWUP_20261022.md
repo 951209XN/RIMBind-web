@@ -19,10 +19,15 @@ Disabling reduced BF16 accumulation did not remove the discrepancy. The exact
 low-level numerical cause is not fully established; do not assert a different
 Flash/cuDNN selection caused it.
 
-The proposed separation of **same-runtime implementation equivalence** from
-**historical cross-runtime portability** requires owner approval. Neither the
-new diagnostic helper nor an equivalence pass authorizes public release. The
-original 1e-5 historical comparison is retained independently.
+The owner explicitly approved separating **same-runtime implementation
+equivalence** from **historical cross-runtime portability** on 2026-10-22:
+“同意按同硬件原代码对照验收，并保留跨硬件差异”. The tolerance remains 1e-5.
+Neither approval nor an equivalence pass alone authorizes public release.
+The original 1e-5 historical comparison is retained independently. The target
+gate requires both fixed DNA/RNA cases, unchanged reference-source hashes,
+matching source/asset locks and a matching assigned GPU/runtime fingerprint.
+The unchanged embedding/C0 scripts run in fresh workspaces; only the documented
+unused Mamba import and local foundation-snapshot resolution are adapted.
 
 The source now includes a PRIVATE core-asset packager with checkpoint and
 authoritative database-lock checks. It does not upload files or grant public

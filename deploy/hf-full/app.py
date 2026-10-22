@@ -1,19 +1,32 @@
 """Full frozen inference candidate; release gate stays closed until target QA."""
 from pathlib import Path
+import json
 import os
+import secrets
+import tempfile
 import threading
 import time
+import uuid
 
 import spaces  # Register ZeroGPU before torch is imported by backend modules.
 import gradio as gr
 
 from backend.assets import Assets
 from backend.service import Service, predict_gpu
+from backend.target_gate import validate_certificate, runtime_fingerprint
+from backend.target_validation import prepare_case, run_gpu_case, new_certificate
 
 RESULTS = Path(os.environ.get('RIMBIND_RESULTS_DIR', '/tmp/rimbind_results')).resolve()
 RESULTS.mkdir(parents=True, exist_ok=True)
 CONFIG = Path(os.environ.get('RIMBIND_ASSET_CONFIG', 'private_assets/serving_assets.json'))
 SERVICE, STATUS = None, 'Frozen offline assets have not been installed or verified.'
+INSTALLED_CASES = None
+if os.environ.get('RIMBIND_INSTALL_ASSETS') == '1':
+    try:
+        from backend.hosted_install import install_authorized_assets
+        CONFIG, INSTALLED_CASES = install_authorized_assets()
+    except Exception as exc:
+        STATUS = 'Authorized asset installation did not complete ('+type(exc).__name__+'). Check owner setup; no prediction is enabled.'
 try:
     SERVICE = Service(Assets(CONFIG), RESULTS)
     STATUS = 'Frozen asset checksums verified. Target-Space model acceptance is still required.'
@@ -21,19 +34,82 @@ except (OSError, ValueError, KeyError, RuntimeError):
     # Do not leak administrator paths or checkpoint metadata into a public error.
     pass
 
-# This flag is an operator-controlled test gate, not evidence of acceptance.
-ENABLED = SERVICE is not None and os.environ.get('RIMBIND_ENABLE_PREDICTION') == '1'
+CERTIFICATE_PATH = Path(os.environ.get('RIMBIND_CERTIFICATE', '/tmp/rimbind_target_certificate.json'))
+CASES_ROOT = Path(os.environ.get('RIMBIND_VALIDATION_CASES', str(INSTALLED_CASES or 'private_assets/validation_cases')))
+VALIDATION_KEY = os.environ.get('RIMBIND_VALIDATION_KEY', '')
+CERTIFICATE = {}
+if SERVICE is not None:
+    CERTIFICATE = new_certificate(SERVICE.assets.lock_sha256)
+    try:
+        loaded = json.loads(CERTIFICATE_PATH.read_text())
+        validate_certificate(loaded, SERVICE.assets.lock_sha256)
+        CERTIFICATE = loaded
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError):
+        pass
+
+
+def enabled_now():
+    if SERVICE is None or os.environ.get('RIMBIND_ENABLE_PREDICTION') != '1':
+        return False
+    try:
+        validate_certificate(CERTIFICATE, SERVICE.assets.lock_sha256)
+        return True
+    except (ValueError, KeyError, TypeError, RuntimeError):
+        return False
+
+
+# An environment flag alone can no longer open the predictor.
+ENABLED = enabled_now()
 
 
 @spaces.GPU(duration=120)
 def allocated_prediction(protein, three_di, memory, task):
     if SERVICE is None:
         raise gr.Error('Frozen assets are unavailable.')
+    if not enabled_now():
+        raise gr.Error('Both target numerical acceptance cases must pass first.')
+    validate_certificate(CERTIFICATE, SERVICE.assets.lock_sha256, current_runtime=runtime_fingerprint())
     return predict_gpu(SERVICE.assets, protein, three_di, memory, task)
 
 
+@spaces.GPU(duration=120)
+def allocated_validation(prepared):
+    if SERVICE is None:
+        raise gr.Error('Frozen assets are unavailable.')
+    return run_gpu_case(SERVICE.assets, prepared)
+
+
+def validate_target(key, task):
+    if not VALIDATION_KEY or not secrets.compare_digest(str(key).encode(), VALIDATION_KEY.encode()):
+        raise gr.Error('Owner validation key is required. Never send it in chat.')
+    if SERVICE is None or task not in {'dna', 'rna'}:
+        raise gr.Error('Verified assets and a valid task are required.')
+    try:
+        with tempfile.TemporaryDirectory(prefix='target_case_') as directory:
+            prepared = prepare_case(SERVICE.assets, CASES_ROOT, task, directory)
+            report = allocated_validation(prepared)
+    except Exception as exc:
+        # Retain a failed attempt, invalidate the task gate, and avoid exposing
+        # administrator paths or credentials from third-party exception strings.
+        report = dict(task=task, same_runtime_equivalence_passed=False,
+                      error_type=type(exc).__name__, release_authorized=False)
+    CERTIFICATE['cases'][task] = report
+    CERTIFICATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    temporary = CERTIFICATE_PATH.with_suffix('.tmp')
+    temporary.write_text(json.dumps(CERTIFICATE, indent=2)+'\n')
+    os.chmod(temporary, 0o600)
+    os.replace(temporary, CERTIFICATE_PATH)
+    directory = RESULTS/uuid.uuid4().hex
+    directory.mkdir()
+    output = directory/'target_numerical_certificate.json'
+    output.write_text(json.dumps(CERTIFICATE, indent=2)+'\n')
+    ready = enabled_now()
+    return (CERTIFICATE, str(output), gr.Button(interactive=ready,
+            value='Predict binding residues' if ready else 'Prediction awaiting deployment acceptance'))
+
+
 def predict(path, chain, sequence, task, accession, consent):
-    if not ENABLED or SERVICE is None:
+    if not enabled_now() or SERVICE is None:
         raise gr.Error('Live inference is not enabled for this deployment.')
     if not consent:
         raise gr.Error('Confirm the upload/privacy notice before submitting.')
@@ -69,7 +145,21 @@ with gr.Blocks(title='RIMBind · frozen inference candidate', delete_cache=(300,
                                  interactive=False, label='Per-residue probabilities — not accuracy scores')
             files = gr.File(label='Download CSV, probability-colored PDB and provenance JSON', file_count='multiple')
     button.click(predict, [pdb, chain, sequence, task, accession, consent], [table, files],
-                 api_name=False, concurrency_limit=1, concurrency_id='full_prediction')
+                 api_name=False, concurrency_limit=1, concurrency_id='frozen_model')
+    with gr.Accordion('Owner-only deployment validation — not a model accuracy test', open=False,
+                      visible=bool(VALIDATION_KEY)):
+        gr.Markdown('Run both fixed cases on this assigned GPU. The unchanged historical feature/C0 scripts '
+                    'are rerun in a fresh temporary workspace. Same-hardware tolerance remains 0.00001; '
+                    'historical cross-hardware drift is retained separately. This uses shared GPU quota. '
+                    'A numerical pass is not certification of public availability or unlimited free inference.')
+        validation_key = gr.Textbox(label='Owner validation key (set as a Space Secret; never send in chat)', type='password')
+        validation_task = gr.Radio(['dna', 'rna'], value='dna', label='Fixed acceptance case')
+        validation_button = gr.Button('Run fixed target comparison', interactive=SERVICE is not None)
+        certificate_output = gr.JSON(label='Numerical certificate and historical drift')
+        certificate_download = gr.File(label='Download numerical acceptance record')
+        validation_button.click(validate_target, [validation_key, validation_task],
+                                [certificate_output, certificate_download, button], api_name=False,
+                                concurrency_limit=1, concurrency_id='frozen_model')
     gr.Markdown('### Interpretation\nDNA uses frozen FULL fusion; RNA uses frozen CR (`NO_TEMPLATE_COUNT`). '
                 'Five frozen fold probabilities are averaged. No retraining or threshold fitting occurs. '
                 'The 0.5 decision threshold is an explicit display rule, not a calibrated confidence guarantee. '
