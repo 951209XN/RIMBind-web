@@ -12,6 +12,8 @@
 
 The account is `XuNing985`; an email address is not the repository namespace. Public metadata shows creation on 2025-10-09 and no PRO subscription. This satisfies only the published age condition; it does not prove email verification or ZeroGPU eligibility.
 
+On 2026-10-22 the owner created https://huggingface.co/spaces/XuNing985/RIMBind-web . A read-only SSH clone confirmed initial commit `f2755b3855f8ae43d2484c53aa61bedbfc004707`, containing `.gitattributes` and `README.md` but no `app.py`. The README's Gradio 6.30.0 / Python 3.12 is a software configuration, not evidence of assigned GPU hardware. The current preflight package matches these runtime versions; preserve its quoted Python-version string and supported card colors.
+
 Current official ZeroGPU documentation lists free personal hosting for eligible accounts, Gradio-only integration, PyTorch 2.8+ compatibility and 48/96GB shared GPU options. Daily quotas and queues apply. Do not start paid GPU Spaces or Jobs as a workaround for missing free access.
 
 The connected research integration has read-repository and Jobs scopes, not repository-write scope. It can inspect identity but cannot by itself create/upload a Space. Use the owner's browser or explicit repository-write authorization. Do not paste access tokens into chat or source code.
