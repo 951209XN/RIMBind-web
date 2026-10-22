@@ -12,7 +12,7 @@ Public interface: https://951209xn.github.io/RIMBind-web/ . Pages deployment suc
 
 - Frozen DNA FULL / RNA CR formula routing and five-fold probability aggregation contracts.
 - Strict PDB chain/sequence intake; model positions are distinguished from original residue keys.
-- Twenty-five Python contract tests and seven browser-data/JavaScript contract tests.
+- Thirty-four Python contract tests and seven browser-data/JavaScript contract tests.
 - Gradio 6.30.0 / Python 3.12 preflight UI constructed and served locally; the 53-residue input check and wrong-chain/sequence rejection passed. This is not a hosted-Space or model test.
 - User-supplied screenshots now show the preflight running on ZERO and its real CUDA hardware diagnostic passing. This remains hardware-only evidence, not hosted model acceptance.
 - All ten task-specific checkpoint and two training-memory-label checksums verified against the original release manifest, without publishing those files.
@@ -20,6 +20,7 @@ Public interface: https://951209xn.github.io/RIMBind-web/ . Pages deployment suc
 - Subsequent original-server GPU tests passed the same DNA core comparison: PyTorch 2.1.1 maximum error **4.87e-10**, and PyTorch 2.10 maximum error **6.01e-08**. These do not erase the CPU failure or validate ZeroGPU.
 - A full inference candidate now implements raw PDB intake, frozen Foldseek/3Di and memory projection, local-only pinned SaProt/ESM3 encoders, strict five-fold C inference, DNA FULL / RNA CR fusion and mapped CSV/PDB/provenance exports. The separate `deploy/hf-full/` app remains gated, not automatically deployed.
 - RNA case 9T7T (264 residues) passed raw-PDB replay on the original server's RTX 3090 at the fixed 1e-5 tolerance (maximum probability error **4.14296e-06**). The DNA raw-PDB replay **did not pass**: the RTX 4080 SUPER test differed by **0.00292251**, and the RTX 3090 test by **1.03413e-05**. Existing query labels were not read and no weights, parameters or tolerance were changed. See [integration status](deploy/FULL_INTEGRATION_STATUS_20261022.md).
+- Controlled follow-up separated same-runtime implementation equivalence from historical portability. Both fixed cases had zero adapter-vs-frozen-operations difference on the same runtime/GPU; historical cross-runtime failures remain. The proposed change of release-validation comparator is pending owner approval. See [numerical follow-up](deploy/NUMERICAL_FOLLOWUP_20261022.md). No target-Space acceptance is implied.
 
 ### Remaining release gates
 
