@@ -6,6 +6,8 @@ A pre-release scientific web interface and external-compute deployment workspace
 
 **Not yet a validated live prediction server.** GitHub Pages hosts the interface only. The application currently offers a documented precomputed DNA example, browser-local structure inspection, visualization of existing probability tables, and CSV/PDB/provenance downloads. New-protein inference is disabled. No laboratory server is exposed or contacted by this project.
 
+Public interface: https://951209xn.github.io/RIMBind-web/ . Pages deployment succeeded on 2026-10-22 at source commit `b8af380915cba74902bc0418185f4ce746a0cff1`. All ten public files returned HTTP 200 and matched the local source byte-for-byte. This is static-publication acceptance, not model-serving acceptance. [Deployment run](https://github.com/951209XN/RIMBind-web/actions/runs/39714389887).
+
 ### Completed locally
 
 - Frozen DNA FULL / RNA CR formula routing and five-fold probability aggregation contracts.
@@ -16,11 +18,10 @@ A pre-release scientific web interface and external-compute deployment workspace
 
 ### Remaining release gates
 
-1. Successful GitHub Pages publication and public-page acceptance. Repository source push and the 17-test GitHub CI have already succeeded; the owner has enabled Pages with GitHub Actions.
-2. A Hugging Face Space under the owner's account, confirmed free ZeroGPU eligibility and write access. A read-only research connection or paid Jobs API is not a substitute.
-3. A private, authorized frozen asset bundle including the original predicted training-memory structures and exact foundation encoders/tokenizers. The local checkpoint archive alone is insufficient.
-4. End-to-end raw-PDB processing and numerical acceptance on the target GPU environment, including separate DNA FULL and RNA CR examples.
-5. Upload privacy/retention, queue, failure, rate-limit and outside-network browser tests.
+1. A Hugging Face Space under the owner's account, confirmed free ZeroGPU eligibility and write access. A read-only research connection or paid Jobs API is not a substitute.
+2. A private, authorized frozen asset bundle including the original predicted training-memory structures and exact foundation encoders/tokenizers. The local checkpoint archive alone is insufficient.
+3. End-to-end raw-PDB processing and numerical acceptance on the target GPU environment, including separate DNA FULL and RNA CR examples.
+4. Upload privacy/retention, queue, failure, rate-limit and outside-network browser tests. Public browser navigation did not complete during this session; HTTP resource checks are not a replacement for browser interaction tests.
 
 Do not describe the service as available for online inference in a manuscript before all applicable gates pass. Do not treat an example explorer as a prediction server.
 
