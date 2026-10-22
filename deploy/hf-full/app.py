@@ -12,16 +12,23 @@ import spaces  # Register ZeroGPU before torch is imported by backend modules.
 import gradio as gr
 
 from backend.assets import Assets
-from backend.service import Service, predict_gpu
-from backend.target_gate import validate_certificate, runtime_fingerprint
-from backend.target_validation import prepare_case, run_gpu_case, new_certificate
+from backend.service import Service
+from backend.target_gate import validate_certificate
+from backend.target_validation import prepare_case, new_certificate
+from backend.worker_environment import ensure_model_python
+from backend.worker_transport import call_worker
 
 RESULTS = Path(os.environ.get('RIMBIND_RESULTS_DIR', '/tmp/rimbind_results')).resolve()
 RESULTS.mkdir(parents=True, exist_ok=True)
 CONFIG = Path(os.environ.get('RIMBIND_ASSET_CONFIG', 'private_assets/serving_assets.json'))
 SERVICE, STATUS = None, 'Frozen offline assets have not been installed or verified.'
+MODEL_PYTHON = None
+try:
+    MODEL_PYTHON = ensure_model_python()
+except Exception as exc:
+    STATUS = 'Isolated frozen model environment is not ready ('+type(exc).__name__+'). No prediction is enabled.'
 INSTALLED_CASES = None
-if os.environ.get('RIMBIND_INSTALL_ASSETS') == '1':
+if MODEL_PYTHON is not None and os.environ.get('RIMBIND_INSTALL_ASSETS') == '1':
     try:
         from backend.hosted_install import install_authorized_assets
         CONFIG, INSTALLED_CASES = install_authorized_assets()
@@ -29,7 +36,8 @@ if os.environ.get('RIMBIND_INSTALL_ASSETS') == '1':
         STATUS = 'Authorized asset installation did not complete ('+type(exc).__name__+'). Check owner setup; no prediction is enabled.'
 try:
     SERVICE = Service(Assets(CONFIG), RESULTS)
-    STATUS = 'Frozen asset checksums verified. Target-Space model acceptance is still required.'
+    if MODEL_PYTHON is not None:
+        STATUS = 'Frozen asset checksums and isolated model environment verified. Target-Space acceptance is still required.'
 except (OSError, ValueError, KeyError, RuntimeError):
     # Do not leak administrator paths or checkpoint metadata into a public error.
     pass
@@ -49,7 +57,7 @@ if SERVICE is not None:
 
 
 def enabled_now():
-    if SERVICE is None or os.environ.get('RIMBIND_ENABLE_PREDICTION') != '1':
+    if SERVICE is None or MODEL_PYTHON is None or os.environ.get('RIMBIND_ENABLE_PREDICTION') != '1':
         return False
     try:
         validate_certificate(CERTIFICATE, SERVICE.assets.lock_sha256)
@@ -63,26 +71,33 @@ ENABLED = enabled_now()
 
 
 @spaces.GPU(duration=120)
-def allocated_prediction(protein, three_di, memory, task):
+def allocated_prediction(protein, three_di, memory, task, certificate):
     if SERVICE is None:
         raise gr.Error('Frozen assets are unavailable.')
-    if not enabled_now():
+    if os.environ.get('RIMBIND_ENABLE_PREDICTION') != '1':
         raise gr.Error('Both target numerical acceptance cases must pass first.')
-    validate_certificate(CERTIFICATE, SERVICE.assets.lock_sha256, current_runtime=runtime_fingerprint())
-    return predict_gpu(SERVICE.assets, protein, three_di, memory, task)
+    validate_certificate(certificate, SERVICE.assets.lock_sha256)
+    return call_worker(MODEL_PYTHON, SERVICE.assets, 'predict',
+                       dict(protein=protein, three_di=three_di, memory=memory, task=task), certificate)
+
+
+def current_gpu_prediction(protein, three_di, memory, task):
+    # ZeroGPU can reuse a fork created before the latest owner validation. Pass
+    # the main-process certificate explicitly, not via stale worker globals.
+    return allocated_prediction(protein, three_di, memory, task, CERTIFICATE)
 
 
 @spaces.GPU(duration=120)
 def allocated_validation(prepared):
     if SERVICE is None:
         raise gr.Error('Frozen assets are unavailable.')
-    return run_gpu_case(SERVICE.assets, prepared)
+    return call_worker(MODEL_PYTHON, SERVICE.assets, 'validate', prepared)
 
 
 def validate_target(key, task):
     if not VALIDATION_KEY or not secrets.compare_digest(str(key).encode(), VALIDATION_KEY.encode()):
         raise gr.Error('Owner validation key is required. Never send it in chat.')
-    if SERVICE is None or task not in {'dna', 'rna'}:
+    if SERVICE is None or MODEL_PYTHON is None or task not in {'dna', 'rna'}:
         raise gr.Error('Verified assets and a valid task are required.')
     try:
         with tempfile.TemporaryDirectory(prefix='target_case_') as directory:
@@ -116,7 +131,7 @@ def predict(path, chain, sequence, task, accession, consent):
     if not path:
         raise gr.Error('Choose a protein PDB file.')
     try:
-        return SERVICE.predict(path, chain, sequence, task, accession, allocated_prediction)
+        return SERVICE.predict(path, chain, sequence, task, accession, current_gpu_prediction)
     except (ValueError, UnicodeError) as exc:
         raise gr.Error(str(exc)) from None
     except Exception:
@@ -154,7 +169,7 @@ with gr.Blocks(title='RIMBind · frozen inference candidate', delete_cache=(300,
                     'A numerical pass is not certification of public availability or unlimited free inference.')
         validation_key = gr.Textbox(label='Owner validation key (set as a Space Secret; never send in chat)', type='password')
         validation_task = gr.Radio(['dna', 'rna'], value='dna', label='Fixed acceptance case')
-        validation_button = gr.Button('Run fixed target comparison', interactive=SERVICE is not None)
+        validation_button = gr.Button('Run fixed target comparison', interactive=SERVICE is not None and MODEL_PYTHON is not None)
         certificate_output = gr.JSON(label='Numerical certificate and historical drift')
         certificate_download = gr.File(label='Download numerical acceptance record')
         validation_button.click(validate_target, [validation_key, validation_task],

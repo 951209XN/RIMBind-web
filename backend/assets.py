@@ -9,6 +9,7 @@ from backend.memory import FOLDSEEK_SHA256
 class Assets:
     def __init__(self, config_path):
         config_path = Path(config_path).resolve()
+        self.config_path = config_path
         config = json.loads(config_path.read_text())
         if config.get('schema') != 'rimbind_serving_local_assets_v1':
             raise RuntimeError('Unsupported asset lock')

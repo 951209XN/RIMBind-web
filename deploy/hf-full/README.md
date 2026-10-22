@@ -22,6 +22,29 @@ source package. By default no asset is downloaded. The optional, explicit
 owner-authorized installer reads two checksum-pinned PRIVATE bundles and exact
 upstream encoder revisions; it never uploads files or changes any account.
 
+## Dependency isolation (build-error repair)
+
+Gradio 6.30.0 requires Hub >=1.16 while frozen Transformers 4.43.3 requires Hub
+<1.0. They cannot share one dependency environment. The UI retains current
+Gradio and Hub 1.16.1; the frozen model runs in a **clean separate venv** with
+Transformers 4.43.3, esm 3.1.1 and Hub 0.36.2. No `--no-deps`, metadata edits,
+UI security downgrade or encoder upgrade is used. The private asset ZIPs,
+frozen weights, fusion parameters and reference-source bytes are unchanged.
+
+On first authorized startup, the installer creates this model venv from official
+PyPI wheels, runs `pip check` and imports the actual model factories. It can take
+several minutes. A failure leaves prediction disabled. Once GPU allocation is
+granted, an internal JSON/NPZ call invokes that interpreter; no visitor pickle,
+shell command or Hub/owner Secret is forwarded. The model process is killed on
+timeout or Linux parent death to avoid keeping GPU work alive after preemption.
+The latest certificate is passed explicitly, not read from stale ZeroGPU fork
+globals. CUDA fingerprint checks occur in the actual model process.
+
+The two-environment Linux/Python 3.12 dependency resolutions and lab GPU
+subprocess test are separate evidence. **Neither establishes actual target
+ZeroGPU child-process compatibility**, a successful clean target installation
+or public-service acceptance. Those gates must still be tested on the Space.
+
 The five-fold model, DNA FULL and RNA CR rules are unchanged. Never substitute
 base-only predictions for RIMBind when the memory assets are missing.
 

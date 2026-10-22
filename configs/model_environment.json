@@ -1,0 +1,21 @@
+{
+  "schema": "rimbind_isolated_model_environment_v1",
+  "purpose": "Keep frozen encoder dependencies separate from the current Gradio/Hub UI dependencies.",
+  "requirements": [
+    "numpy==1.26.4",
+    "torch==2.8.0",
+    "torchvision==0.23.0",
+    "transformers==4.43.3",
+    "tokenizers==0.19.1",
+    "huggingface-hub==0.36.2",
+    "esm==3.1.1"
+  ],
+  "required_versions": {
+    "numpy": "1.26.4", "torch": "2.8.0", "torchvision": "0.23.0",
+    "transformers": "4.43.3", "tokenizers": "0.19.1",
+    "huggingface-hub": "0.36.2", "esm": "3.1.1"
+  },
+  "ui_environment_must_not_install": ["transformers", "esm"],
+  "no_dependency_check_bypass": true,
+  "target_zerogpu_subprocess_acceptance_pending": true
+}

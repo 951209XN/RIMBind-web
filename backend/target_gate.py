@@ -37,6 +37,8 @@ def runtime_fingerprint():
     properties = torch.cuda.get_device_properties(device)
     return dict(python=platform.python_version(), torch=torch.__version__,
                 transformers=importlib.metadata.version('transformers'),
+                huggingface_hub=importlib.metadata.version('huggingface-hub'),
+                tokenizers=importlib.metadata.version('tokenizers'),
                 esm=importlib.metadata.version('esm'), numpy=importlib.metadata.version('numpy'),
                 cuda=torch.version.cuda, cudnn=torch.backends.cudnn.version(),
                 gpu=properties.name, capability=list(torch.cuda.get_device_capability(device)),
