@@ -1,2 +1,4 @@
 gradio==6.30.0
 numpy==1.26.4
+spaces==0.51.3
+torch==2.8.0

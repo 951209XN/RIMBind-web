@@ -12,8 +12,9 @@ Public interface: https://951209xn.github.io/RIMBind-web/ . Pages deployment suc
 
 - Frozen DNA FULL / RNA CR formula routing and five-fold probability aggregation contracts.
 - Strict PDB chain/sequence intake; model positions are distinguished from original residue keys.
-- Sixteen Python contract tests (including six Space-package checks) and seven browser-data/JavaScript contract tests.
+- Eighteen Python contract tests (including eight Space-package checks) and seven browser-data/JavaScript contract tests.
 - Gradio 6.30.0 / Python 3.12 preflight UI constructed and served locally; the 53-residue input check and wrong-chain/sequence rejection passed. This is not a hosted-Space or model test.
+- A user-supplied Space log reported `No @spaces.GPU function detected during startup`. The preflight now registers a real, opt-in CUDA allocation/arithmetic diagnostic via `@spaces.GPU(duration=20)` with explicit `spaces` and `torch` dependencies. It does not run RIMBind or relax any numerical gate; actual hosted startup and GPU execution still need confirmation.
 - All ten task-specific checkpoint and two training-memory-label checksums verified against the original release manifest, without publishing those files.
 - Prepared-feature model-C test on the 53-residue 6JHE A example. CPU PyTorch 2.8 differed from the original output by **1.3380931289663778e-05**, above the preselected **1e-05** tolerance. Numerical acceptance therefore **did not pass**; the threshold was not relaxed. This is not a raw-PDB or GPU test.
 

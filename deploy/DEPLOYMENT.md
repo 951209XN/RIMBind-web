@@ -35,6 +35,10 @@ For a file-only web picker, run `python tools/prepare_space.py --flat --output /
 
 The present repository intentionally does **not** enable a partially implemented backend or silently return SSCP-only scores as full RIMBind. After numerical/full-pipeline acceptance, connect a real backend and update status truthfully.
 
+### ZeroGPU preflight startup requirement
+
+The original input-only preflight was rejected on ZeroGPU with `No @spaces.GPU function detected during startup` (user-provided log, original upload commit prefix `b3963d9`). The current app imports `spaces` before `torch` and registers a button-bound `@spaces.GPU(duration=20)` hardware diagnostic. It creates a CUDA tensor and checks its sum of squares; no dummy GPU decorator is placed around the CPU PDB parser. The button explicitly reports shared-quota use and that hardware success is not model acceptance. Without CUDA it raises an error rather than returning a false success. Do not select paid hardware or enable `share=True` to address this error. Upload the corrected `app.py` and `requirements.txt`; the other three flat-package files are unchanged.
+
 ## Official references checked on 2026-10-21
 
 - https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages

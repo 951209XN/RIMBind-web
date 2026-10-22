@@ -53,5 +53,23 @@ class SpacePackage(unittest.TestCase):
             self.assertTrue((target / 'backend/inputs.py').is_file())
             self.assertIn('from backend.inputs import parse_pdb', (target / 'app.py').read_text())
 
+    def test_zerogpu_registration_and_real_cuda_probe(self):
+        source = (SPACE / 'app.py').read_text()
+        tree = ast.parse(source)
+        gpu = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'gpu_diagnostic')
+        decorators = [ast.unparse(d) for d in gpu.decorator_list]
+        self.assertEqual(decorators, ['spaces.GPU(duration=20)'])
+        self.assertIn("device='cuda'", ast.unparse(gpu))
+        self.assertIn('torch.cuda.is_available()', ast.unparse(gpu))
+        self.assertIn('torch.dot(values, values)', ast.unparse(gpu))
+        self.assertIn('gpu_button.click(gpu_diagnostic', source)
+        self.assertIn('full_model_validated=False', source)
+        self.assertLess(source.index('import spaces'), source.index('import torch'))
+
+    def test_zerogpu_dependencies_are_explicit(self):
+        lines = (SPACE / 'requirements.txt').read_text().splitlines()
+        self.assertIn('spaces==0.51.3', lines)
+        self.assertIn('torch==2.8.0', lines)
+
 if __name__ == '__main__':
     unittest.main()
