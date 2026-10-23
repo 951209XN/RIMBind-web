@@ -1,8 +1,11 @@
 {
   "repository_url": "https://github.com/951209XN/RIMBind-web",
-  "space_url": "",
+  "space_url": "https://huggingface.co/spaces/XuNing985/RIMBind-web",
   "live_prediction_enabled": false,
-  "service_status": "Pre-release · inference validation pending",
+  "inference_route": "external_space_only",
+  "direct_upload_from_pages": false,
+  "service_status": "Research beta · DNA/RNA workflows tested",
+  "evidence_date": "2026-10-23",
   "model_version": "DNA FULL / RNA CR",
   "threshold": 0.5
 }

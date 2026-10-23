@@ -1,5 +1,9 @@
 # GitHub + external free compute
 
+## Current route (2026-10-23)
+
+Use the [current user guide](USER_GUIDE.md), [research-beta status](RESEARCH_BETA_STATUS_20261023.md), and [full Space controls](hf-full/README.md). Real DNA/RNA model workflows and ordinary download artifacts have now been exercised. GitHub Pages links to the external predictor; it does not forward files or bypass its numerical gate. The earlier setup/preflight notes below are preserved development history, not instructions to replace the current full app with the old preflight. Runtime/source changes need new numerical validation; frontend/docs-only changes do not.
+
 ## GitHub Pages
 
 1. Upload **only this repository directory**, never its parent `private_assets/`, `audit/`, manuscript folder, credentials or `.pt` files.
