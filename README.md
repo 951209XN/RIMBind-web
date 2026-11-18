@@ -2,6 +2,10 @@
 
 Structure-based DNA/RNA-binding residue prediction using frozen SSCP model C and task-specific interface-memory fusion.
 
+## Frozen weights and evaluation release
+
+The ten trained SSCP model-C checkpoints used by RIMBind are now available in [`checkpoints/`](checkpoints/), with original-file SHA256 checksums and a version manifest (`20261118-frozen-C`). [`evaluation/`](evaluation/) provides checkpoint verification and residue-level metric evaluation against supplied experimental labels. This release does not include training or ablation workflows, training-memory assets, third-party encoder weights, or a complete end-to-end reproduction package. See [Data and code availability](DATA_AND_CODE_AVAILABILITY.md).
+
 ## Deployment status
 
 **Research beta: real DNA and RNA prediction workflows have been exercised. Broader operational acceptance is not yet complete.**
@@ -46,7 +50,8 @@ The C-only loader omits only an unused E/F Mamba import from the execution AST; 
 | Directory | Purpose |
 |---|---|
 | `site/` | Static Pages explorer and external predictor link. No credentials or direct uploads. |
-| `backend/`, `vendor/`, `configs/` | Frozen inference, input/output contracts and SHA256 manifests; no weights. |
+| `backend/`, `vendor/`, `configs/` | Frozen inference, input/output contracts and SHA256 manifests. |
+| `checkpoints/`, `evaluation/` | Frozen model-C weights and result evaluation utilities; see the release scope above. |
 | `deploy/hf-full/` | Full gated Space app and deployment controls. |
 | `deploy/hf-space/` | Earlier hardware/input preflight only; not the full predictor. |
 | `tests/`, `tools/` | Contract checks, packaging and acceptance utilities. |
@@ -64,4 +69,4 @@ Contract tests do not invoke a model or reproduce target-Space runtime behavior.
 
 ## License, contact and citation
 
-Original RIMBind source is Apache-2.0; see [LICENSE](LICENSE). This does not relicense third-party encoders or training-memory assets. Weights and private assets are not in this repository. The 3Dmol viewer retains its upstream BSD-3-Clause notice. The manuscript citation and permanent asset archive remain pending; do not invent a DOI or publication reference. For support, use this repository's Issues without posting credentials or sensitive structures.
+Original RIMBind source is Apache-2.0; see [LICENSE](LICENSE). This does not relicense third-party encoders or training-memory assets. The ten RIMBind SSCP checkpoints are provided in `checkpoints/`; training-memory and third-party model assets are not included in this release. The 3Dmol viewer retains its upstream BSD-3-Clause notice. The manuscript citation and permanent asset archive remain pending; do not invent a DOI or publication reference. For support, use this repository's Issues without posting credentials or sensitive structures.

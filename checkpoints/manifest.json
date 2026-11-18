@@ -1,0 +1,105 @@
+{
+  "schema": "rimbind_frozen_weights_release_v1",
+  "release_id": "20261118-frozen-C",
+  "released_on": "2026-11-18",
+  "model_variant": "C",
+  "file_format": "original PyTorch checkpoint; state_dict plus unchanged checkpoint metadata",
+  "aggregation": "sigmoid each fold logit, then arithmetic mean of five fold probabilities within one task",
+  "manuscript_versions": {
+    "DNA": "FULL",
+    "RNA": "CR"
+  },
+  "checkpoint_bytes_unchanged": true,
+  "checkpoints": [
+    {
+      "task": "dna",
+      "fold": 0,
+      "path": "dna/fold0/best.pt",
+      "bytes": 23932577,
+      "sha256": "b34379222f1da915df5d31b08495955bd5261cb19477261e42e2b38eb138999f",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    },
+    {
+      "task": "dna",
+      "fold": 1,
+      "path": "dna/fold1/best.pt",
+      "bytes": 23932577,
+      "sha256": "01919de692375d95e53beda4f0d45922457d8b77643b9640dfd488b30ef0417b",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    },
+    {
+      "task": "dna",
+      "fold": 2,
+      "path": "dna/fold2/best.pt",
+      "bytes": 23932577,
+      "sha256": "46bea31ebe6b3ba684c45ae909b74c990c43082d80e0a595ba9a57bc217e67d2",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    },
+    {
+      "task": "dna",
+      "fold": 3,
+      "path": "dna/fold3/best.pt",
+      "bytes": 23932577,
+      "sha256": "43f722ff1fedbecdaaa072d4b0fa6d9d85c7b5a1506e9ae3c41ec7043c806197",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    },
+    {
+      "task": "dna",
+      "fold": 4,
+      "path": "dna/fold4/best.pt",
+      "bytes": 23932577,
+      "sha256": "4ddf29fb8cf7070c19c6a39adfc222bcae4905422c90dafac8b26273b38ea98f",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    },
+    {
+      "task": "rna",
+      "fold": 0,
+      "path": "rna/fold0/best.pt",
+      "bytes": 23932577,
+      "sha256": "6fd29d2eae624588bfb78e34224cbeb88af1bf595c4448fbd988bda72dfab48b",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    },
+    {
+      "task": "rna",
+      "fold": 1,
+      "path": "rna/fold1/best.pt",
+      "bytes": 23932577,
+      "sha256": "ad4e11844240fae9fcdcb73cd081751a1dc61270407f43e4b680f0b14c0e55d4",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    },
+    {
+      "task": "rna",
+      "fold": 2,
+      "path": "rna/fold2/best.pt",
+      "bytes": 23932577,
+      "sha256": "18055a2416824e0ca832607e7a92ee60fe11bea3245857cd96307b7b9eed30fe",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    },
+    {
+      "task": "rna",
+      "fold": 3,
+      "path": "rna/fold3/best.pt",
+      "bytes": 23932577,
+      "sha256": "03c7914ddc44bed6097d220e124a1ab54c69b58ab556f1219f38175997877185",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    },
+    {
+      "task": "rna",
+      "fold": 4,
+      "path": "rna/fold4/best.pt",
+      "bytes": 23932577,
+      "sha256": "beb695c7db7c88cff1dd02c2f246a4ee339425aae90ac5513e011f4a170f237b",
+      "tensor_count": 111,
+      "tensor_schema_sha256": "3a7b5f14edea1bd590b0ee1e483ac1390247e2c428334029ecc0d406a18c0eb8"
+    }
+  ]
+}
