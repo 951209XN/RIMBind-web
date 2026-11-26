@@ -4,7 +4,7 @@
   "live_prediction_enabled": false,
   "inference_route": "external_space_only",
   "direct_upload_from_pages": false,
-  "service_status": "Research beta · public prediction under validation",
+  "service_status": "Research beta · DNA/RNA browser workflows checked",
   "evidence_date": "2026-11-26",
   "model_version": "DNA FULL / RNA CR",
   "threshold": 0.5,
