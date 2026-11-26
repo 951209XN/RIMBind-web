@@ -11,5 +11,7 @@
   "initial_service_max_residues": 600,
   "live_prediction_enabled": false,
   "accepted_input": "protein chain in PDB; optional matching sequence",
-  "release_gate": "Full raw-PDB-to-probabilities GPU validation has not passed."
+  "release_gate": "The external Space requires source-, protocol-, asset- and runtime-bound numerical acceptance before prediction. Restart or runtime changes may require owner revalidation.",
+  "live_prediction_enabled_scope": "Static GitHub Pages frontend only; external Space prediction is controlled separately.",
+  "prediction_service_url": "https://huggingface.co/spaces/XuNing985/RIMBind-web"
 }

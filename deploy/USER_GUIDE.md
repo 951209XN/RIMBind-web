@@ -6,7 +6,7 @@ Open [RIMBind on Hugging Face](https://huggingface.co/spaces/XuNing985/RIMBind-w
 
 Required input is a protein PDB file ≤2 MiB and one selected alphanumeric chain ID. The chain must contain ≤600 observed standard amino acids, each with Cα coordinates. The first model is used. Missing residues are not reconstructed, ambiguous atoms are rejected, and MSE is not silently converted. Use DNA and RNA as separate tasks. Optional FASTA must exactly match the observed chain, not a full sequence with unobserved residues. Provide the original PDB accession if known; four characters, first a digit. It enables same-accession template exclusion. A filename alone does not identify the query.
 
-Confirm permission to upload and the privacy notice. Select **Predict binding residues** once. No owner key or Hugging Face API token should be entered for ordinary predictions. An owner-validation panel is for administration only, not an alternative prediction interface. If the predictor is awaiting acceptance after restart, report this in repository Issues without sending credentials.
+Confirm permission to upload and the privacy notice. Select **Predict binding residues** once. No owner key or Hugging Face API token should be entered for ordinary predictions. An owner-validation panel is for administration only, not an alternative prediction interface. If the predictor is awaiting acceptance after restart, ordinary users must wait for the maintainer to revalidate it; uploading a different structure will not unlock it. Maintainers use the existing owner-only panel to run both fixed cases. Those cases are already installed on the server and require no file upload. Never send the owner key in an Issue or chat.
 
 ## Interpret and download
 
@@ -35,4 +35,4 @@ The app queues jobs with one frozen-model operation at a time and an eight-job q
 - Generic inference error or timeout: no partial prediction should be treated as success. Record the time and non-sensitive error text for the maintainer. Do not post the structure, token or owner key in a public Issue.
 - Restart: results and the numerical certificate are held on ephemeral storage by default. Owner revalidation may be needed before prediction resumes. The static website link does not guarantee the Space is ready.
 
-There is no uptime SLA, unlimited GPU promise, clinical-use claim or journal certification. The current evidence covers two fixed numerical cases and their ordinary output downloads; see [acceptance status](RESEARCH_BETA_STATUS_20261023.md).
+There is no uptime SLA, unlimited GPU promise, clinical-use claim or journal certification. The 2026-10-23 checks covered two fixed numerical cases and ordinary output downloads; see [the historical acceptance status](RESEARCH_BETA_STATUS_20261023.md). Both fixed cases passed again on 2026-11-26, but current ordinary upload and download checks remain in progress. See the repository README for the latest service status.

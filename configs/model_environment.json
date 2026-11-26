@@ -17,5 +17,7 @@
   },
   "ui_environment_must_not_install": ["transformers", "esm"],
   "no_dependency_check_bypass": true,
-  "target_zerogpu_subprocess_acceptance_pending": true
+  "target_zerogpu_subprocess_acceptance_pending": false,
+  "target_numerical_check_date": "2026-11-26",
+  "public_service_operational_acceptance_pending": true
 }

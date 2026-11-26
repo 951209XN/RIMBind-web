@@ -1,5 +1,5 @@
 gradio==6.30.0
-spaces==0.51.3
+spaces
 numpy==1.26.4
 torch==2.8.0
 huggingface-hub==1.16.1

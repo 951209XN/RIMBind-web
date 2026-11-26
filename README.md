@@ -8,7 +8,9 @@ The ten trained SSCP model-C checkpoints used by RIMBind are now available in [`
 
 ## Deployment status
 
-**Research beta: real DNA and RNA prediction workflows have been exercised. Broader operational acceptance is not yet complete.**
+**Research beta.** Earlier DNA/RNA workflows were exercised on 2026-10-23. On 2026-11-26, both fixed numerical cases passed again in the current Space runtime with zero adapter-versus-original probability difference. Validation of ordinary public uploads and downloads is still in progress; these fixed-case checks do not establish current end-to-end service availability.
+
+The 2026-11-26 deployment repair removes an obsolete `spaces==0.51.3` UI dependency pin that conflicted with the version installed by the Hugging Face Gradio builder. Frozen model weights, model-environment versions, fusion parameters and numerical tolerances are unchanged. The weight release remains `20261118-frozen-C` under the existing `weights-eval-20261118` tag.
 
 - [Website and local result explorer](https://951209xn.github.io/RIMBind-web/)
 - [External GPU predictor on Hugging Face](https://huggingface.co/spaces/XuNing985/RIMBind-web)
