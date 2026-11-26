@@ -189,6 +189,19 @@ with gr.Blocks(title='RIMBind · frozen inference candidate', delete_cache=(300,
                 'This does not control hosting-platform logs or backups. Free GPU queues, quota limits and interruptions apply.')
 
 
+def refresh_prediction_gate():
+    # Recheck the existing server-side certificate for every newly loaded page.
+    ready = enabled_now()
+    return gr.update(
+        interactive=ready,
+        value='Predict binding residues' if ready else 'Prediction awaiting deployment acceptance',
+    )
+
+
+with demo:
+    demo.load(refresh_prediction_gate, inputs=[], outputs=button, api_name=False)
+
+
 def cleanup_loop():
     while True:
         time.sleep(300)
